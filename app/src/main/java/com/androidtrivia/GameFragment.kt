@@ -93,13 +93,22 @@ class GameFragment : Fragment() {
                         binding.invalidateAll()
                     } else {
                         // We've won!  Navigate to the gameWonFragment.
-                        view.findNavController().navigate(R.id.gameWonFragment,
-                            null,
+                            // 1 when we dont have arguments
+//                        view.findNavController().navigate(R.id.gameWonFragment,
+//                            null,
+//                            NavOptions.Builder().setPopUpTo(R.id.gameFragment,true).build())
+//
+                        // 2 when we pass arguments safely
+
+                        view.findNavController().navigate(
+                            GameFragmentDirections.actionGameFragmentToGameWonFragment(numQuestions,questionIndex),
                             NavOptions.Builder().setPopUpTo(R.id.gameFragment,true).build())
                     }
                 } else {
                     // Game over! A wrong answer sends us to the gameOverFragment.
-                    view.findNavController().navigate(R.id.gameOverFragment,null,
+//                    view.findNavController().navigate(R.id.gameOverFragment,null,
+//                        NavOptions.Builder().setPopUpTo(R.id.gameFragment,true).build())
+                    view.findNavController().navigate(GameFragmentDirections.actionGameFragmentToGameOverFragment(),
                         NavOptions.Builder().setPopUpTo(R.id.gameFragment,true).build())
                 }
             }

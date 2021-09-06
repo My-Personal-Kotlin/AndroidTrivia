@@ -1,13 +1,12 @@
 package com.androidtrivia
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.androidtrivia.databinding.FragmentTitleBinding
 
 class TitleFragment : Fragment() {
@@ -18,6 +17,7 @@ class TitleFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_title,container,false)
 
+        setHasOptionsMenu(true)
         // 1 way
 //        binding.playButton.setOnClickListener { view:View ->
 //            Navigation.findNavController(view).navigate(R.id.action_titleFragment_to_gameFragment)
@@ -28,10 +28,24 @@ class TitleFragment : Fragment() {
 //            view.findNavController().navigate(R.id.action_titleFragment_to_gameFragment)
 //        }
         // 3 way
-        binding.playButton.setOnClickListener(
-            Navigation.createNavigateOnClickListener(R.id.action_titleFragment_to_gameFragment)
-        )
+        binding.playButton.setOnClickListener {
+            // this is used when we donot have to pass safe args
+//           ( Navigation.createNavigateOnClickListener(R.id.action_titleFragment_to_gameFragment) )
+            // otherwise this below
+            it.findNavController().navigate(TitleFragmentDirections.actionTitleFragmentToGameFragment())
+        }
         return binding.root
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.overflow_menu,menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Id at menu item and Fragment must be same
+        // otherwise we have to implement it own ourself like switch()/when() by id
+        return NavigationUI.onNavDestinationSelected(item!!,requireView().findNavController())
+                || super.onOptionsItemSelected(item)
+    }
 }
